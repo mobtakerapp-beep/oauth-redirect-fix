@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ export const Route = createFileRoute("/auth/callback")({
 });
 
 function AuthCallbackPage() {
+  const navigate = useNavigate();
   const [message, setMessage] = useState("جارٍ إكمال تسجيل الدخول…");
 
   useEffect(() => {
@@ -41,6 +42,7 @@ function AuthCallbackPage() {
           if (exchangeError) throw exchangeError;
         }
 
+        // التأكد المباشر من مزامنة الجلسة وحفظ الـ Tokens
         const { data, error: userError } = await supabase.auth.getSession();
         if (userError || !data.session) {
           const { data: userData } = await supabase.auth.getUser();
@@ -51,6 +53,8 @@ function AuthCallbackPage() {
 
         if (!cancelled) {
           toast.success("تم تسجيل الدخول بنجاح!");
+          
+          // تحويل مباشر وسليم لنفس الدومين الحالي دون تسريب التوكن أو تخريب الجلسة
           const origin = window.location.origin;
           window.location.replace(`${origin}/`);
         }
@@ -67,7 +71,7 @@ function AuthCallbackPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [navigate]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background p-6 text-center">

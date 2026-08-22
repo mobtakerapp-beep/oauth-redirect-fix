@@ -33,7 +33,9 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-const REDIRECT_URI = "https://mulakhasy-ai.mobtakerapp.workers.dev/auth/callback";
+// Must be a same-origin URL of the app that is serving this page, otherwise the
+// OAuth broker rejects it with "redirect_uri is not allowed".
+const getRedirectUri = () => `${window.location.origin}/auth/callback`;
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ function AuthPage() {
     setLoading(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: REDIRECT_URI,
+        redirect_uri: getRedirectUri(),
       });
 
       if (result.error) throw result.error;

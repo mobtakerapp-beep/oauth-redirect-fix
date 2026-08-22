@@ -72,7 +72,6 @@ function AuthPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Toaster position="top-center" />
       <Card className="w-full max-w-md rounded-3xl border-border/70 p-6 shadow-lg sm:p-8">
         <Link
           to="/"

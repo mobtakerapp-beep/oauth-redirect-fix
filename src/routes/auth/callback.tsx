@@ -29,15 +29,26 @@ function AuthCallbackPage() {
     async function handleCallback() {
       try {
         const url = new URL(window.location.href);
+        const hash = new URLSearchParams(url.hash.replace(/^#/, ""));
         const code = url.searchParams.get("code");
-        const error = url.searchParams.get("error");
-        const errorDescription = url.searchParams.get("error_description");
+        const error = url.searchParams.get("error") ?? hash.get("error");
+        const errorDescription =
+          url.searchParams.get("error_description") ?? hash.get("error_description");
 
         if (error) {
           throw new Error(errorDescription || error);
         }
 
-        if (code) {
+        const accessToken = hash.get("access_token");
+        const refreshToken = hash.get("refresh_token");
+
+        if (accessToken && refreshToken) {
+          const { error: setError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (setError) throw setError;
+        } else if (code) {
           const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
           if (exchangeError) throw exchangeError;
         }

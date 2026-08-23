@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { BookOpen, Gamepad2, Home, Loader2, Printer, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoUrl from "@/assets/logo.png";
 import { FlashcardsTab } from "@/components/FlashcardsTab";
 import { PlayTab } from "@/components/PlayTab";
 import { SummaryTab } from "@/components/SummaryTab";
@@ -60,7 +60,7 @@ function SharedLessonPage() {
       <Toaster position="top-center" />
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
         <Link to="/" className="flex items-center gap-2 font-display font-extrabold text-primary">
-          <img src={logoAsset.url} alt="" width={40} height={40} className="size-9" loading="lazy" />
+          <img src={logoUrl} alt="" width={40} height={40} className="size-9" loading="lazy" />
           <span className="text-sm sm:text-base">
             {ar ? "مولّد الدروس الذكي" : "Smart Lesson Generator"}
           </span>

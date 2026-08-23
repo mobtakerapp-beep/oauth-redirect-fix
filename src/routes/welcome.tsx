@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import heroImg from "@/assets/hero.png";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoUrl from "@/assets/logo.png";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -131,7 +131,7 @@ function WelcomePage() {
     <main className="min-h-screen blob-bg bg-background">
       <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 pt-5">
         <Link to="/welcome" className="flex items-center gap-2 font-display font-extrabold text-primary">
-          <img src={logoAsset.url} alt="" width={44} height={44} className="size-10" />
+          <img src={logoUrl} alt="" width={44} height={44} className="size-10" />
           <span className="text-sm sm:text-lg">
             {ar ? "مولّد الدروس الذكي" : "Smart Lesson Generator"}
           </span>

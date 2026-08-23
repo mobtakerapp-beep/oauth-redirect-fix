@@ -1,0 +1,10 @@
+{
+  "name": "mulakhasy-ai",
+  "compatibility_date": "2026-08-23",
+  "assets": {
+    "directory": "./.output/public",
+    "binding": "ASSETS"
+  },
+  "main": "./.output/server/index.mjs",
+  "compatibility_flags": ["nodejs_compat"]
+}

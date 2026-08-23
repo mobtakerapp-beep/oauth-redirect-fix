@@ -277,6 +277,8 @@ export async function buildLessonPackage(data: Input, apiKey: string): Promise<L
     body: JSON.stringify({
       model: "google/gemini-3.7-flash",
       messages: [{ role: "user", content: parts }],
+      response_format: { type: "json_object" },
+      max_tokens: 16000,
     }),
   });
 

@@ -93,6 +93,54 @@ Return ONLY a JSON object with this exact shape (no markdown fences):
 {"title":string,"summary":string,"summaryPoints":string[],"summarySections":[{"heading":string,"points":[{"text":string,"subPoints":string[]}]}],"highlights":string[],"language":"ar"|"en","mcqs":[{"question":string,"options":string[],"answerIndex":number}],"trueFalse":[{"statement":string,"answer":boolean}],"flashcards":[{"term":string,"definition":string}]}`;
 }
 
+// Repairs JSON that was cut off mid-generation (token limit) by closing any
+// open string, dropping a dangling fragment, and balancing brackets.
+function repairTruncatedJson(text: string): string {
+  const stack: string[] = [];
+  let inString = false;
+  let escaped = false;
+  let lastSafe = -1; // index after the last complete value inside a container
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i]!;
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === "\\") escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === "{" || ch === "[") stack.push(ch === "{" ? "}" : "]");
+    else if (ch === "}" || ch === "]") {
+      stack.pop();
+      lastSafe = i;
+    } else if (ch === ",") lastSafe = i - 1;
+  }
+
+  let out = text;
+  if (inString || (stack.length > 0 && lastSafe >= 0)) {
+    out = text.slice(0, lastSafe + 1);
+    // recompute open brackets for the truncated slice
+    stack.length = 0;
+    let s = false;
+    let e = false;
+    for (const ch of out) {
+      if (s) {
+        if (e) e = false;
+        else if (ch === "\\") e = true;
+        else if (ch === '"') s = false;
+        continue;
+      }
+      if (ch === '"') s = true;
+      else if (ch === "{" || ch === "[") stack.push(ch === "{" ? "}" : "]");
+      else if (ch === "}" || ch === "]") stack.pop();
+    }
+  }
+  out = out.replace(/,\s*$/, "");
+  while (stack.length > 0) out += stack.pop();
+  return out;
+}
+
 function extractJson(raw: string): unknown {
   const cleaned = raw
     .trim()
@@ -103,11 +151,21 @@ function extractJson(raw: string): unknown {
     return JSON.parse(cleaned);
   } catch {
     const start = cleaned.indexOf("{");
+    if (start === -1) throw new Error("The AI response could not be read. Try again.");
     const end = cleaned.lastIndexOf("}");
-    if (start === -1 || end === -1) throw new Error("The AI response could not be read. Try again.");
-    return JSON.parse(cleaned.slice(start, end + 1));
+    const candidate = end > start ? cleaned.slice(start, end + 1) : cleaned.slice(start);
+    try {
+      return JSON.parse(candidate);
+    } catch {
+      try {
+        return JSON.parse(repairTruncatedJson(cleaned.slice(start)));
+      } catch {
+        throw new Error("The AI response was incomplete. Please try again.");
+      }
+    }
   }
 }
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function normalize(parsed: any, data: Input): LessonPackage {
@@ -219,6 +277,8 @@ export async function buildLessonPackage(data: Input, apiKey: string): Promise<L
     body: JSON.stringify({
       model: "google/gemini-3.7-flash",
       messages: [{ role: "user", content: parts }],
+      response_format: { type: "json_object" },
+      max_tokens: 16000,
     }),
   });
 

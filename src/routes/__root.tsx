@@ -85,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "حوّل أي درس إلى أسئلة تفاعلية وألعاب وأوراق عمل للطباعة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#f97316" },
+      { name: "theme-color", content: "#1f6fd0" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "مولّد الدروس" },
     ],

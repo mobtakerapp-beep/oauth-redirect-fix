@@ -9,7 +9,9 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
+import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
+
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/auth/")({
@@ -89,20 +91,22 @@ function AuthPage() {
   const signInWithGoogle = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: "https://mulakhasy-ai.mobtakerapp.workers.dev/auth/callback",
-        },
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
       });
-      if (error) throw error;
+      if (result.error) throw result.error;
+      if (result.redirected) return;
+      toast.success(ar ? "تم تسجيل الدخول!" : "Signed in!");
+      navigate({ to: "/" });
     } catch (error) {
       const raw = error instanceof Error ? error.message : String(error ?? "");
       console.error("Google sign-in failed:", error);
       toast.error(raw || (ar ? "فشل تسجيل الدخول بجوجل" : "Google sign-in failed"));
+    } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <main className="blob-bg flex min-h-screen items-center justify-center bg-background p-4">

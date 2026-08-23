@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import catImg from "@/assets/cat.png";
 import dogImg from "@/assets/dog.png";
 import heroImg from "@/assets/hero.png";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logoUrl from "@/assets/logo.png";
 import partyImg from "@/assets/party.png";
 import { EditorTab } from "@/components/EditorTab";
 import { FlashcardsTab } from "@/components/FlashcardsTab";
@@ -183,7 +183,7 @@ function Home() {
             to="/welcome"
             className="flex items-center gap-2 font-display text-lg font-extrabold text-primary"
           >
-            <img src={logoAsset.url} alt="" width={40} height={40} className="size-9" />
+            <img src={logoUrl} alt="" width={40} height={40} className="size-9" />
             <span className="text-sm sm:text-base">{t.brand}</span>
           </Link>
           <div className="flex flex-wrap items-center gap-2">

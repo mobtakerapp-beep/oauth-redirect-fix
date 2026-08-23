@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as MyLessonsRouteImport } from './routes/my-lessons'
+import { Route as SigninRouteImport } from './routes/signin'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SubscribeRouteImport } from './routes/subscribe'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
@@ -34,9 +37,24 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyLessonsRoute = MyLessonsRouteImport.update({
   id: '/my-lessons',
   path: '/my-lessons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SubscribeRoute = SubscribeRouteImport.update({
@@ -69,7 +87,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
   '/my-lessons': typeof MyLessonsRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/subscribe': typeof SubscribeRoute
   '/welcome': typeof WelcomeRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -79,7 +100,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/login': typeof LoginRoute
   '/my-lessons': typeof MyLessonsRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/subscribe': typeof SubscribeRoute
   '/welcome': typeof WelcomeRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -91,7 +115,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRouteWithChildren
+  '/login': typeof LoginRoute
   '/my-lessons': typeof MyLessonsRoute
+  '/signin': typeof SigninRoute
+  '/signup': typeof SignupRoute
   '/subscribe': typeof SubscribeRoute
   '/welcome': typeof WelcomeRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -104,7 +131,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/login'
     | '/my-lessons'
+    | '/signin'
+    | '/signup'
     | '/subscribe'
     | '/welcome'
     | '/auth/callback'
@@ -114,7 +144,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/login'
     | '/my-lessons'
+    | '/signin'
+    | '/signup'
     | '/subscribe'
     | '/welcome'
     | '/auth/callback'
@@ -125,7 +158,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/login'
     | '/my-lessons'
+    | '/signin'
+    | '/signup'
     | '/subscribe'
     | '/welcome'
     | '/auth/callback'
@@ -137,7 +173,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRouteWithChildren
+  LoginRoute: typeof LoginRoute
   MyLessonsRoute: typeof MyLessonsRoute
+  SigninRoute: typeof SigninRoute
+  SignupRoute: typeof SignupRoute
   SubscribeRoute: typeof SubscribeRoute
   WelcomeRoute: typeof WelcomeRoute
   STokenRoute: typeof STokenRoute
@@ -166,11 +205,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my-lessons': {
       id: '/my-lessons'
       path: '/my-lessons'
       fullPath: '/my-lessons'
       preLoaderRoute: typeof MyLessonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/subscribe': {
@@ -227,7 +287,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRouteWithChildren,
+  LoginRoute: LoginRoute,
   MyLessonsRoute: MyLessonsRoute,
+  SigninRoute: SigninRoute,
+  SignupRoute: SignupRoute,
   SubscribeRoute: SubscribeRoute,
   WelcomeRoute: WelcomeRoute,
   STokenRoute: STokenRoute,
